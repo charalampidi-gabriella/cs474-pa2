@@ -2,6 +2,8 @@ from image import PGMImage
 from correlation import correlate
 from gaussian import apply_smoothing
 from sharpening import unsharp_masking, high_boost_filtering
+from median import apply_median_filter, salt_and_pepper_noise, apply_averaging
+
 
 def get_user_choice():
     print("Which function do you want to test?")
@@ -10,6 +12,9 @@ def get_user_choice():
     print("3. Gaussian Smoothing with 15x15 mask")
     print("4. Unsharp Masking")
     print("5. High-Boost Filtering")
+    print("6. Salt and pepper noise")
+    print("7. Median")
+    print("8. Averaging")
 
     choice = input("Enter the number of your choice: ")
     return choice
@@ -46,6 +51,34 @@ elif choice == "5":
     enhanced_image.pixels = enhanced_pixels
     enhanced_image.write_to_file(f'images/lenna_high_boost_k{k}.pgm')
 
+elif choice == "6":
+    image = PGMImage()
+    image.read_from_file('images/lenna.pgm')
+    noisy_image = salt_and_pepper_noise(image.pixels, 30)  # Adding 30% noise
+    noisy_img_obj = PGMImage(width=image.width, height=image.height, maxval=image.maxval)
+    noisy_img_obj.pixels = noisy_image
+    noisy_img_obj.write_to_file('images/lenna_noisy.pgm')
+    print("Noisy image generated!")
+
+elif choice == "7":
+    image = PGMImage()
+    image.read_from_file('images/lenna_noisy.pgm')  # image already has noise
+    filtered_image = apply_median_filter(image.pixels, 7)  # Using 7x7 filter
+    filtered_img_obj = PGMImage(width=image.width, height=image.height, maxval=image.maxval)
+    filtered_img_obj.pixels = filtered_image
+    filtered_img_obj.write_to_file('lenna_filtered.pgm')
+    print("Median filtered image generated!")
+
+elif choice == "8":
+    image = PGMImage()
+    image.read_from_file('images/lenna_noisy.pgm')  # image already has noise
+    averaged_image = apply_averaging(image.pixels, 7)  # Using 7x7 filter
+    averaged_img_obj = PGMImage(width=image.width, height=image.height, maxval=image.maxval)
+    averaged_img_obj.pixels = averaged_image
+    averaged_img_obj.write_to_file('lenna_averaged.pgm')
+    print("Averaged image generated!")
+
 else:
     print("Invalid choice.")
     exit()
+
