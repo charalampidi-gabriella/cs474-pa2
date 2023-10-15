@@ -70,10 +70,10 @@ def apply_smoothing(input_image_path, mask_size):
     image.read_from_file(input_image_path)
     if mask_size == "7x7":
         smoothed_image_pixels = convolve(image.pixels, gaussian_mask_7x7)
-        output_filename = 'images/smoothed2_7x7.pgm'
+        output_filename = 'images/sf_smoothed_7x7.pgm'
     elif mask_size == "15x15":
         smoothed_image_pixels = convolve(image.pixels, gaussian_mask_15x15)
-        output_filename = 'images/smoothed_15x15.pgm'
+        output_filename = 'images/sf_smoothed_15x15.pgm'
     else:
         print("Invalid choice.")
         return

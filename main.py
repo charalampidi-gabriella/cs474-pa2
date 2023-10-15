@@ -33,10 +33,10 @@ if choice == "1":
     print(f"New image written to {new_file_name}")
 
 elif choice == "2":
-    apply_smoothing('images/lenna.pgm', '7x7')
+    apply_smoothing('images/sf.pgm', '7x7')
 
 elif choice == "3":
-    apply_smoothing('images/lenna.pgm', '15x15')
+    apply_smoothing('images/sf.pgm', '15x15')
 
 elif choice == "4":
     sharpened_pixels = unsharp_masking(image.pixels)
@@ -66,16 +66,27 @@ elif choice == "7":
     filtered_image = apply_median_filter(image.pixels, 7)  # Using 7x7 filter
     filtered_img_obj = PGMImage(width=image.width, height=image.height, maxval=image.maxval)
     filtered_img_obj.pixels = filtered_image
-    filtered_img_obj.write_to_file('lenna_filtered.pgm')
+    filtered_img_obj.write_to_file('images/lenna_filtered.pgm')
     print("Median filtered image generated!")
 
 elif choice == "8":
+    
     image = PGMImage()
-    image.read_from_file('images/lenna_noisy.pgm')  # image already has noise
-    averaged_image = apply_averaging(image.pixels, 7)  # Using 7x7 filter
+    image.read_from_file('images/sf.pgm')  # image already has noise
+    mask_size = input("Enter mask size (7 or 15): ")
+    if mask_size == "7":
+        mask_size = 7
+        output_filename = 'images/sf_averaged_7x7.pgm'
+    elif mask_size == "15":
+        mask_size = 15
+        output_filename = 'images/sf_averaged_15x15.pgm'
+    else:
+        print("Invalid choice.")
+        exit()
+    averaged_image = apply_averaging(image.pixels, mask_size)  
     averaged_img_obj = PGMImage(width=image.width, height=image.height, maxval=image.maxval)
     averaged_img_obj.pixels = averaged_image
-    averaged_img_obj.write_to_file('lenna_averaged.pgm')
+    averaged_img_obj.write_to_file(output_filename)
     print("Averaged image generated!")
 
 else:
