@@ -1,5 +1,5 @@
-##############################TO-CORRECT
-
+##############################CORRECT
+import numpy as np
 
 from image import PGMImage
 def normalize_image(image_pixels):
@@ -13,7 +13,7 @@ def normalize_image(image_pixels):
     
     for r in range(height):
         for c in range(width):
-            normalized_pixels[r][c] = int(255 * (image_pixels[r][c] - min_val) / (max_val - min_val))
+            normalized_pixels[r][c] = int(255*(image_pixels[r][c] - min_val) / (max_val - min_val))
     
     return normalized_pixels
 

@@ -24,9 +24,9 @@ choice = get_user_choice()
 
 if choice == "1":
     image = PGMImage()
-    image.read_from_file('images/lenna.pgm')
+    image.read_from_file('images\Image.pgm')
     small_image = PGMImage()
-    small_image.read_from_file('images/Pattern.pgm')
+    small_image.read_from_file('images\Pattern.pgm')
     mask = small_image.pixels
     correlated_image = correlate(image, mask)
     new_file_name = 'images/correlated.pgm'
