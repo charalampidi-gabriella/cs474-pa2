@@ -1,9 +1,25 @@
 from image import PGMImage
+import numpy as np
+import cv2
 from correlation import correlate
 from gaussian import apply_smoothing
 from sharpening import unsharp_masking, high_boost_filtering
 from median import apply_median_filter, salt_and_pepper_noise, apply_averaging
 
+def normalize_image(image_pixels):
+    min_val = min(map(min, image_pixels))
+    max_val = max(map(max, image_pixels))
+
+    height = len(image_pixels)
+    width = len(image_pixels[0])
+    
+    normalized_pixels = [[0] * width for _ in range(height)]
+    
+    for r in range(height):
+        for c in range(width):
+            normalized_pixels[r][c] = int(255*(image_pixels[r][c] - min_val) / (max_val - min_val))
+    
+    return normalized_pixels
 
 def get_user_choice():
     print("Which function do you want to test?")
@@ -111,8 +127,20 @@ elif choice == "9":
     sobel_y = correlate(image, masky)
     sobely_file_name = 'sobel_y.pgm'
 
+    maginput = cv2.imread("images\Lenna.pgm")
+    gray = cv2.cvtColor(maginput, cv2.COLOR_BGR2GRAY)
+    gX = cv2.Sobel(gray, cv2.CV_64F, 1, 0)
+    gY = cv2.Sobel(gray, cv2.CV_64F, 0, 1)
+    magnitude = np.sqrt((gX ** 2) + (gY ** 2))
+    magnitude = normalize_image(magnitude)
+    magoutput = PGMImage()
+    magoutput.read_from_file('images\Lenna.pgm')
+    magoutput.pixels = magnitude
+    magoutput.write_to_file("magnitude.pgm")
+
     sobel_x.write_to_file(sobelx_file_name)
     sobel_y.write_to_file(sobely_file_name)
+    
     print(f"New image written to {sobelx_file_name}")
     print(f"New image written to {sobely_file_name}")
 
@@ -131,6 +159,23 @@ elif choice == "10":
 
     prewitt_y = correlate(image, prewitty)
     prewitty_file_name = 'prewitt_y.pgm'
+
+    maginput = cv2.imread("images\Lenna.pgm")
+    gray = cv2.cvtColor(maginput, cv2.COLOR_BGR2GRAY)
+
+
+    kernelx = np.array([[1,1,1],[0,0,0],[-1,-1,-1]])
+    kernely = np.array([[-1,0,1],[-1,0,1],[-1,0,1]])
+    img_prewittx = cv2.filter2D(maginput, -1, kernelx)
+    img_prewitty = cv2.filter2D(maginput, -1, kernely)
+
+
+    magnitude = np.sqrt((img_prewittx ** 2) + (img_prewitty ** 2))
+    magnitude = normalize_image(magnitude)
+    magoutput = PGMImage()
+    magoutput.read_from_file('images\Lenna.pgm')
+    magoutput.pixels = magnitude
+    magoutput.write_to_file("magnitude_prewitt.pgm")
 
     prewitt_x.write_to_file(prewittx_file_name)
     prewitt_y.write_to_file(prewitty_file_name)
