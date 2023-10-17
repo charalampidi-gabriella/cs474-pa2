@@ -15,6 +15,7 @@ def get_user_choice():
     print("6. Salt and pepper noise")
     print("7. Median")
     print("8. Averaging")
+    print("9. Sobel")
 
     choice = input("Enter the number of your choice: ")
     return choice
@@ -29,7 +30,7 @@ if choice == "1":
     small_image.read_from_file('images\Pattern.pgm')
     mask = small_image.pixels
     correlated_image = correlate(image, mask)
-    new_file_name = 'images/correlated.pgm'
+    new_file_name = 'correlated.pgm'
     correlated_image.write_to_file(new_file_name)
     print(f"New image written to {new_file_name}")
 
@@ -93,6 +94,62 @@ elif choice == "8":
     averaged_img_obj.pixels = averaged_image
     averaged_img_obj.write_to_file(output_filename)
     print("Averaged image generated!")
+
+elif choice == "9":
+    image = PGMImage()
+    image.read_from_file('images\Lenna.pgm')
+    maskx = [[-1,-2,-1],
+            [0,0,0],
+            [1,2,1]]
+    masky = [[-1,0,1],
+            [-2,0,2],
+            [-1,0,1]]
+    
+    sobel_x = correlate(image, maskx)
+    sobelx_file_name = 'sobel_x.pgm'
+
+    sobel_y = correlate(image, masky)
+    sobely_file_name = 'sobel_y.pgm'
+
+    sobel_x.write_to_file(sobelx_file_name)
+    sobel_y.write_to_file(sobely_file_name)
+    print(f"New image written to {sobelx_file_name}")
+    print(f"New image written to {sobely_file_name}")
+
+elif choice == "10":
+    image = PGMImage()
+    image.read_from_file('images\Lenna.pgm')
+    prewittx = [[-1,-1,-1],
+            [0,0,0],
+            [1,1,1]]
+    prewitty = [[-1,0,1],
+            [-1,0,1],
+            [-1,0,1]]
+    
+    prewitt_x = correlate(image, prewittx)
+    prewittx_file_name = 'prewitt_x.pgm'
+
+    prewitt_y = correlate(image, prewitty)
+    prewitty_file_name = 'prewitt_y.pgm'
+
+    prewitt_x.write_to_file(prewittx_file_name)
+    prewitt_y.write_to_file(prewitty_file_name)
+    print(f"New image written to {prewittx_file_name}")
+    print(f"New image written to {prewitty_file_name}")
+
+elif choice == "11":
+    image = PGMImage()
+    image.read_from_file('images\Lenna.pgm')
+    mask = [[0,1,0],
+            [1,-4,1],
+            [0,1,0]]
+    
+    laplacian = correlate(image, mask)
+    laplacian_file_name = 'laplacian.pgm'
+
+    laplacian.write_to_file(laplacian_file_name)
+
+    print(f"New image written to {laplacian_file_name}")
 
 else:
     print("Invalid choice.")
